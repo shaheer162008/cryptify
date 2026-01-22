@@ -377,27 +377,40 @@ const HEX_DELIMITERS: HexDelimiterConfig = {
 export const textToHex = (text: string, delimiter: string = 'Space'): string => {
   try {
     const bytes = aesjs.utils.utf8.toBytes(text);
-    const config = HEX_DELIMITERS[delimiter] || HEX_DELIMITERS['Space'];
     
     const output: string[] = [];
+    
+    // Map delimiter names to actual characters
+    const delimiterMap: { [key: string]: string } = {
+      'Space': ' ',
+      'Colon': ':',
+      'Comma': ',',
+      'Semi-colon': ';',
+      'Line feed': '\n',
+      'CRLF': '\r\n',
+      '0x': '0x',
+      '\\x': '\\x',
+      'None': ''
+    };
+    
+    const actualDelimiter = delimiterMap[delimiter] || ' ';
+    const isPrepend = delimiter === '0x' || delimiter === '\\x';
     
     for (let i = 0; i < bytes.length; i++) {
       const hex = bytes[i].toString(16).padStart(2, '0');
       
-      if (config.prepend) {
-        output.push(delimiter + hex);
+      if (isPrepend) {
+        output.push(actualDelimiter + hex);
       } else {
         output.push(hex);
       }
     }
     
     // Join with delimiter (if not prepended, add between items)
-    if (config.prepend) {
-      return output.join('');
-    } else if (delimiter === 'None') {
+    if (isPrepend || delimiter === 'None') {
       return output.join('');
     } else {
-      return output.join(delimiter);
+      return output.join(actualDelimiter);
     }
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : 'Text to Hex conversion failed');
