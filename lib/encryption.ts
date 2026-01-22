@@ -183,10 +183,21 @@ export const aesDecrypt = (encryptedHex: string, hexKey: string = ''): string =>
   }
 };
 
-// Algorithm: URL Encode/Decode (RFC 3986 compliant)
+// Algorithm: URL Encode/Decode (CyberChef compatible - encodes all special chars including dots)
 export const urlEncode = (text: string): string => {
   try {
-    return encodeURIComponent(text);
+    // CyberChef's "Encode all special chars" mode - encodes dots and other chars
+    return encodeURIComponent(text)
+      .replace(/!/g, "%21")
+      .replace(/#/g, "%23")
+      .replace(/'/g, "%27")
+      .replace(/\(/g, "%28")
+      .replace(/\)/g, "%29")
+      .replace(/\*/g, "%2A")
+      .replace(/-/g, "%2D")
+      .replace(/\./g, "%2E")  // Encode dots (like CyberChef)
+      .replace(/_/g, "%5F")
+      .replace(/~/g, "%7E");
   } catch (error) {
     throw new Error('URL encoding failed');
   }
