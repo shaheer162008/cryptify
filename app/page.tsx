@@ -1,184 +1,165 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { base64Encrypt, base64Decrypt } from '@/lib/encryption';
-import { Copy, RefreshCw, Zap } from 'lucide-react';
+import { Copy, ArrowLeftRight, Check } from 'lucide-react';
 
 export default function Home() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
-  const [mode, setMode] = useState<'encrypt' | 'decrypt'>('encrypt');
+  const [mode, setMode] = useState<'encode' | 'decode'>('encode');
+  const [copiedInput, setCopiedInput] = useState(false);
+  const [copiedOutput, setCopiedOutput] = useState(false);
 
-  const handleProcess = () => {
+  // Live processing - automatic encoding/decoding
+  useEffect(() => {
+    if (!inputText.trim()) {
+      setOutputText('');
+      return;
+    }
+
     try {
-      if (!inputText.trim()) {
-        setOutputText('');
-        return;
-      }
-      const result = mode === 'encrypt' ? base64Encrypt(inputText) : base64Decrypt(inputText);
+      const result = mode === 'encode' ? base64Encrypt(inputText) : base64Decrypt(inputText);
       setOutputText(result);
     } catch (error) {
-      setOutputText(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setOutputText('');
+    }
+  }, [inputText, mode]);
+
+  const copyToClipboard = async (text: string, type: 'input' | 'output') => {
+    if (!text) return;
+    
+    await navigator.clipboard.writeText(text);
+    
+    if (type === 'input') {
+      setCopiedInput(true);
+      setTimeout(() => setCopiedInput(false), 2000);
+    } else {
+      setCopiedOutput(true);
+      setTimeout(() => setCopiedOutput(false), 2000);
     }
   };
 
-  const copyToClipboard = () => {
-    if (outputText) {
-      navigator.clipboard.writeText(outputText);
-      alert('Copied to clipboard!');
-    }
-  };
-
-  const swapTexts = () => {
+  const switchMode = () => {
+    setMode(mode === 'encode' ? 'decode' : 'encode');
+    // Swap texts
+    const temp = inputText;
     setInputText(outputText);
-    setOutputText(inputText);
-    setMode(mode === 'encrypt' ? 'decrypt' : 'encrypt');
-  };
-
-  const reset = () => {
-    setInputText('');
-    setOutputText('');
+    setOutputText(temp);
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black p-4 md:p-8">
-      <div className="max-w-5xl mx-auto">
-        {/* Header - macOS Style */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-black dark:text-white mb-3">
-            Cryptify
-          </h1>
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 font-light">
-            Base64 Encoder & Decoder
-          </p>
-        </div>
-
-        {/* Main Card - Clean macOS Style */}
-        <Card className="border-0 shadow-2xl overflow-hidden">
-          <div className="bg-white dark:bg-gray-950 p-8 md:p-12">
-            {/* Mode Selector */}
-            <div className="mb-8">
-              <div className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg w-fit">
-                <Button
-                  onClick={() => {
-                    setMode('encrypt');
-                    setOutputText('');
-                  }}
-                  variant={mode === 'encrypt' ? 'default' : 'ghost'}
-                  className={`${
-                    mode === 'encrypt'
-                      ? 'bg-black text-white dark:bg-white dark:text-black'
-                      : 'text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
-                  } font-semibold px-6 py-2 rounded-md transition-all`}
-                >
-                  Encode
-                </Button>
-                <Button
-                  onClick={() => {
-                    setMode('decrypt');
-                    setOutputText('');
-                  }}
-                  variant={mode === 'decrypt' ? 'default' : 'ghost'}
-                  className={`${
-                    mode === 'decrypt'
-                      ? 'bg-black text-white dark:bg-white dark:text-black'
-                      : 'text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
-                  } font-semibold px-6 py-2 rounded-md transition-all`}
-                >
-                  Decode
-                </Button>
-              </div>
-            </div>
-
-            {/* Input/Output Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              {/* Input */}
-              <div className="flex flex-col">
-                <label className="text-sm font-semibold text-black dark:text-white mb-3">
-                  Input
-                </label>
-                <textarea
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Enter text here..."
-                  className="h-64 p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all resize-none"
-                />
-              </div>
-
-              {/* Output */}
-              <div className="flex flex-col">
-                <label className="text-sm font-semibold text-black dark:text-white mb-3">
-                  Output
-                </label>
-                <textarea
-                  value={outputText}
-                  readOnly
-                  placeholder="Result will appear here..."
-                  className="h-64 p-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none resize-none"
-                />
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3">
+    <div className="h-screen bg-white dark:bg-black flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col p-4 md:p-6 gap-4 max-w-7xl mx-auto w-full">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white">
+              Base64
+            </h1>
+            <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-900 rounded-lg">
               <Button
-                onClick={handleProcess}
-                className="bg-black text-white dark:bg-white dark:text-black hover:opacity-90 font-semibold px-6 py-2 transition-all"
+                onClick={() => setMode('encode')}
+                variant="ghost"
+                size="sm"
+                className={`${
+                  mode === 'encode'
+                    ? 'bg-black text-white dark:bg-white dark:text-black'
+                    : 'text-gray-600 dark:text-gray-400'
+                } px-4 py-1 text-xs font-semibold transition-all`}
               >
-                <Zap className="w-4 h-4 mr-2" />
-                {mode === 'encrypt' ? 'Encode' : 'Decode'}
+                Encode
               </Button>
-
               <Button
-                onClick={swapTexts}
-                variant="outline"
-                className="border-2 border-black text-black dark:border-white dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black font-semibold px-6 py-2 transition-all"
+                onClick={() => setMode('decode')}
+                variant="ghost"
+                size="sm"
+                className={`${
+                  mode === 'decode'
+                    ? 'bg-black text-white dark:bg-white dark:text-black'
+                    : 'text-gray-600 dark:text-gray-400'
+                } px-4 py-1 text-xs font-semibold transition-all`}
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Swap
-              </Button>
-
-              <Button
-                onClick={copyToClipboard}
-                variant="outline"
-                disabled={!outputText}
-                className="border-2 border-black text-black dark:border-white dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black font-semibold px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              >
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
-              </Button>
-
-              <Button
-                onClick={reset}
-                variant="outline"
-                className="border-2 border-black text-black dark:border-white dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black font-semibold px-6 py-2 transition-all"
-              >
-                Clear
+                Decode
               </Button>
             </div>
           </div>
-        </Card>
+          
+          <Button
+            onClick={switchMode}
+            variant="outline"
+            size="sm"
+            className="border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900"
+          >
+            <ArrowLeftRight className="w-4 h-4" />
+          </Button>
+        </div>
 
-        {/* Info Section */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="border-0 shadow-lg p-6 bg-black text-white dark:bg-white dark:text-black">
-            <h3 className="text-lg font-semibold mb-3">About Base64</h3>
-            <p className="text-sm leading-relaxed opacity-90">
-              Base64 is a binary-to-text encoding scheme that uses only 64 printable characters. It's commonly used to transmit data over text-based protocols.
-            </p>
+        {/* Main Content - Side by Side */}
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 min-h-0">
+          {/* Input Panel */}
+          <Card className="flex flex-col border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
+              <span className="text-sm font-semibold text-black dark:text-white">
+                Input
+              </span>
+              <Button
+                onClick={() => copyToClipboard(inputText, 'input')}
+                variant="ghost"
+                size="sm"
+                disabled={!inputText}
+                className="h-7 px-2 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white disabled:opacity-30"
+              >
+                {copiedInput ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+              </Button>
+            </div>
+            <textarea
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              placeholder="Enter text to encode/decode..."
+              className="flex-1 p-4 bg-white dark:bg-black text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none resize-none font-mono text-sm"
+            />
           </Card>
 
-          <Card className="border-0 shadow-lg p-6 bg-gray-100 dark:bg-gray-900">
-            <h3 className="text-lg font-semibold text-black dark:text-white mb-3">Features</h3>
-            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
-              <li>✓ Instant encoding & decoding</li>
-              <li>✓ Copy results with one click</li>
-              <li>✓ Swap modes instantly</li>
-              <li>✓ macOS-inspired design</li>
-            </ul>
+          {/* Output Panel */}
+          <Card className="flex flex-col border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
+              <span className="text-sm font-semibold text-black dark:text-white">
+                Output
+              </span>
+              <Button
+                onClick={() => copyToClipboard(outputText, 'output')}
+                variant="ghost"
+                size="sm"
+                disabled={!outputText}
+                className="h-7 px-2 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white disabled:opacity-30"
+              >
+                {copiedOutput ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+              </Button>
+            </div>
+            <textarea
+              value={outputText}
+              readOnly
+              placeholder="Result will appear here automatically..."
+              className="flex-1 p-4 bg-gray-50 dark:bg-gray-950 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none resize-none font-mono text-sm"
+            />
           </Card>
+        </div>
+
+        {/* Info Bar */}
+        <div className="flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-900 rounded-lg text-xs text-gray-600 dark:text-gray-400">
+          <span>Live processing enabled - Results update automatically</span>
+          <span>{inputText.length} characters</span>
         </div>
       </div>
     </div>
