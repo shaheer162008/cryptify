@@ -1,0 +1,35 @@
+
+> cryptify@0.1.0 build
+> next build
+
+▲ Next.js 16.1.4 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 25.3s
+  Running TypeScript ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/15) ...
+  Generating static pages using 3 workers (3/15) 
+  Generating static pages using 3 workers (7/15) 
+  Generating static pages using 3 workers (11/15) 
+✓ Generating static pages using 3 workers (15/15) in 3.2s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ○ /about/cryptify
+├ ○ /base32
+├ ○ /base64
+├ ○ /chain-encrypt
+├ ○ /cryptify
+├ ○ /hex
+├ ○ /md5
+├ ○ /rot13
+├ ○ /sha1
+└ ○ /url
+
+
+○  (Static)  prerendered as static content
+
