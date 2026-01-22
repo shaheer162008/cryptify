@@ -67,6 +67,13 @@ const Sidebar = () => {
                   <ArrowLeftRight className="w-5 h-5" />
                   <span>ROT13</span>
                 </Link>
+                <Link
+                  href="/cryptify"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <Lock className="w-5 h-5" />
+                  <span>Cryptify</span>
+                </Link>
               </div>
             </div>
 
@@ -185,12 +192,12 @@ const Sidebar = () => {
                           <span>ROT13</span>
                         </Link>
                         <Link
-                          href="/rot13"
+                          href="/cryptify"
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <ArrowLeftRight className="w-5 h-5" />
-                          <span>ROT13</span>
+                          <Lock className="w-5 h-5" />
+                          <span>Cryptify</span>
                         </Link>
                       </div>
                     </div>
