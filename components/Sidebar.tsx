@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Lock, Home } from 'lucide-react';
+import { Menu, Lock, Home, Hash } from 'lucide-react';
 import { useState } from 'react';
 
 const Sidebar = () => {
@@ -28,10 +28,17 @@ const Sidebar = () => {
           <div className="space-y-1">
             <Link
               href="/"
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all font-medium"
+              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
             >
               <Home className="w-5 h-5" />
-              <span>Base64 Encoder</span>
+              <span>Base64</span>
+            </Link>
+            <Link
+              href="/md5"
+              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+            >
+              <Hash className="w-5 h-5" />
+              <span>MD5 Hash</span>
             </Link>
           </div>
         </nav>
@@ -82,10 +89,18 @@ const Sidebar = () => {
                     <Link
                       href="/"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all font-medium"
+                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                     >
                       <Home className="w-5 h-5" />
-                      <span>Base64 Encoder</span>
+                      <span>Base64</span>
+                    </Link>
+                    <Link
+                      href="/md5"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                    >
+                      <Hash className="w-5 h-5" />
+                      <span>MD5 Hash</span>
                     </Link>
                   </div>
                 </nav>
