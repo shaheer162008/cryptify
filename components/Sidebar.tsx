@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Lock, Home, Hash, KeyRound, ArrowLeftRight, Code, Link2, Lock as LockIcon } from 'lucide-react';
+import { Menu, Home, Hash, KeyRound, ArrowLeftRight, Code, Link2, Lock as LockIcon } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -23,9 +24,7 @@ const Sidebar = () => {
         {/* Logo */}
         <div className="p-6 border-b border-gray-200 dark:border-gray-800 sticky top-0 bg-white dark:bg-black">
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-black dark:bg-white rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 shrink-0">
-              <Lock className="w-5 h-5 text-white dark:text-black" />
-            </div>
+            <Image src="/logo.png" alt="Cryptify Logo" width={40} height={40} className="rounded-xl transition-transform group-hover:scale-105 shrink-0" />
             <span className="font-bold text-xl text-black dark:text-white truncate">Cryptify</span>
           </Link>
         </div>
@@ -43,42 +42,42 @@ const Sidebar = () => {
                   href="/base64"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <Home className="w-5 h-5 flex-shrink-0" />
+                  <Home className="w-5 h-5 shrink-0" />
                   <span className="truncate">Base64</span>
                 </Link>
                 <Link
                   href="/hex"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <Code className="w-5 h-5 flex-shrink-0" />
+                  <Code className="w-5 h-5 shrink-0" />
                   <span className="truncate">Hex</span>
                 </Link>
                 <Link
                   href="/url"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <Link2 className="w-5 h-5 flex-shrink-0" />
+                  <Link2 className="w-5 h-5 shrink-0" />
                   <span className="truncate">URL</span>
                 </Link>
                 <Link
                   href="/base32"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <LockIcon className="w-5 h-5 flex-shrink-0" />
+                  <LockIcon className="w-5 h-5 shrink-0" />
                   <span className="truncate">Base32</span>
                 </Link>
                 <Link
                   href="/rot13"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <ArrowLeftRight className="w-5 h-5 flex-shrink-0" />
+                  <ArrowLeftRight className="w-5 h-5 shrink-0" />
                   <span className="truncate">ROT13</span>
                 </Link>
                 <Link
                   href="/cryptify"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <Lock className="w-5 h-5 flex-shrink-0" />
+                  <LockIcon className="w-5 h-5 shrink-0" />
                   <span className="truncate">Cryptify</span>
                 </Link>
               </div>
@@ -94,7 +93,7 @@ const Sidebar = () => {
                   href="/chain-encrypt"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <Lock className="w-5 h-5 flex-shrink-0" />
+                  <LockIcon className="w-5 h-5 shrink-0" />
                   <span className="truncate">Chain Encrypt</span>
                 </Link>
               </div>
@@ -110,14 +109,14 @@ const Sidebar = () => {
                   href="/md5"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <Hash className="w-5 h-5 flex-shrink-0" />
+                  <Hash className="w-5 h-5 shrink-0" />
                   <span className="truncate">MD5 Hash</span>
                 </Link>
                 <Link
                   href="/sha1"
                   className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium group"
                 >
-                  <KeyRound className="w-5 h-5 flex-shrink-0" />
+                  <KeyRound className="w-5 h-5 shrink-0" />
                   <span className="truncate">SHA1 Hash</span>
                 </Link>
               </div>
@@ -137,9 +136,7 @@ const Sidebar = () => {
       <div className="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 z-40 backdrop-blur-sm bg-opacity-90 dark:bg-opacity-90">
         <div className="flex justify-between items-center p-4">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center">
-              <Lock className="w-5 h-5 text-white dark:text-black" />
-            </div>
+            <Image src="/logo.png" alt="Cryptify Logo" width={32} height={32} className="rounded-lg" />
             <span className="font-bold text-lg text-black dark:text-white">Cryptify</span>
           </Link>
 
@@ -158,9 +155,7 @@ const Sidebar = () => {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center space-x-3"
                   >
-                    <div className="w-10 h-10 bg-black dark:bg-white rounded-xl flex items-center justify-center">
-                      <Lock className="w-5 h-5 text-white dark:text-black" />
-                    </div>
+                    <Image src="/logo.png" alt="Cryptify Logo" width={40} height={40} className="rounded-xl" />
                     <span className="font-bold text-xl text-black dark:text-white">Cryptify</span>
                   </Link>
                 </div>
@@ -179,7 +174,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <Home className="w-5 h-5 flex-shrink-0" />
+                          <Home className="w-5 h-5 shrink-0" />
                           <span className="truncate">Base64</span>
                         </Link>
                         <Link
@@ -187,7 +182,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <Code className="w-5 h-5 flex-shrink-0" />
+                          <Code className="w-5 h-5 shrink-0" />
                           <span className="truncate">Hex</span>
                         </Link>
                         <Link
@@ -195,7 +190,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <Link2 className="w-5 h-5 flex-shrink-0" />
+                          <Link2 className="w-5 h-5 shrink-0" />
                           <span className="truncate">URL</span>
                         </Link>
                         <Link
@@ -203,7 +198,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <LockIcon className="w-5 h-5 flex-shrink-0" />
+                          <LockIcon className="w-5 h-5 shrink-0" />
                           <span className="truncate">Base32</span>
                         </Link>
                         <Link
@@ -211,7 +206,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <ArrowLeftRight className="w-5 h-5 flex-shrink-0" />
+                          <ArrowLeftRight className="w-5 h-5 shrink-0" />
                           <span className="truncate">ROT13</span>
                         </Link>
                         <Link
@@ -219,7 +214,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <Lock className="w-5 h-5 flex-shrink-0" />
+                          <LockIcon className="w-5 h-5 shrink-0" />
                           <span className="truncate">Cryptify</span>
                         </Link>
                       </div>
@@ -236,7 +231,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <Lock className="w-5 h-5 flex-shrink-0" />
+                          <LockIcon className="w-5 h-5 shrink-0" />
                           <span className="truncate">Chain Encrypt</span>
                         </Link>
                       </div>
@@ -253,7 +248,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <Hash className="w-5 h-5 flex-shrink-0" />
+                          <Hash className="w-5 h-5 shrink-0" />
                           <span className="truncate">MD5 Hash</span>
                         </Link>
                         <Link
@@ -261,7 +256,7 @@ const Sidebar = () => {
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-2 rounded-lg text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >
-                          <KeyRound className="w-5 h-5 flex-shrink-0" />
+                          <KeyRound className="w-5 h-5 shrink-0" />
                           <span className="truncate">SHA1 Hash</span>
                         </Link>
                       </div>

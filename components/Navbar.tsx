@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Lock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 export default function Navbar() {
   return (
@@ -10,9 +9,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-3 group">
-          <div className="w-9 h-9 bg-black dark:bg-white rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
-            <Lock className="w-5 h-5 text-white dark:text-black" />
-          </div>
+          <Image src="/logo.png" alt="Cryptify Logo" width={36} height={36} className="rounded-lg transition-transform group-hover:scale-105" />
           <span className="font-bold text-xl text-black dark:text-white">Cryptify</span>
         </Link>
 
