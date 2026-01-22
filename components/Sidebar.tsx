@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Lock, Home, Hash, KeyRound } from 'lucide-react';
+import { Menu, Lock, Home, Hash, KeyRound, ArrowLeftRight, Code, Link2, Lock as LockIcon } from 'lucide-react';
 import { useState } from 'react';
 
 const Sidebar = () => {
@@ -25,28 +25,73 @@ const Sidebar = () => {
 
         {/* Navigation Links */}
         <nav className="flex-1 p-4">
-          <div className="space-y-1">
-            <Link
-              href="/"
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
-            >
-              <Home className="w-5 h-5" />
-              <span>Base64</span>
-            </Link>
-            <Link
-              href="/md5"
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
-            >
-              <Hash className="w-5 h-5" />
-              <span>MD5 Hash</span>
-            </Link>
-            <Link
-              href="/sha1"
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
-            >
-              <KeyRound className="w-5 h-5" />
-              <span>SHA1 Hash</span>
-            </Link>
+          <div className="space-y-6">
+            {/* Two Way Category */}
+            <div>
+              <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-600 uppercase tracking-wider">
+                Two Way
+              </h3>
+              <div className="space-y-1">
+                <Link
+                  href="/"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <Home className="w-5 h-5" />
+                  <span>Base64</span>
+                </Link>
+                <Link
+                  href="/hex"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <Code className="w-5 h-5" />
+                  <span>Hex</span>
+                </Link>
+                <Link
+                  href="/url"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <Link2 className="w-5 h-5" />
+                  <span>URL</span>
+                </Link>
+                <Link
+                  href="/base32"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <LockIcon className="w-5 h-5" />
+                  <span>Base32</span>
+                </Link>
+                <Link
+                  href="/rot13"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <ArrowLeftRight className="w-5 h-5" />
+                  <span>ROT13</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* One Way Category */}
+            <div>
+              <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-600 uppercase tracking-wider">
+                One Way
+              </h3>
+              <div className="space-y-1">
+                <Link
+                  href="/md5"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <Hash className="w-5 h-5" />
+                  <span>MD5 Hash</span>
+                </Link>
+                <Link
+                  href="/sha1"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                >
+                  <KeyRound className="w-5 h-5" />
+                  <span>SHA1 Hash</span>
+                </Link>
+              </div>
+            </div>
           </div>
         </nav>
 
@@ -92,31 +137,88 @@ const Sidebar = () => {
 
                 {/* Mobile Navigation Links */}
                 <nav className="flex-1 p-4">
-                  <div className="space-y-1">
-                    <Link
-                      href="/"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
-                    >
-                      <Home className="w-5 h-5" />
-                      <span>Base64</span>
-                    </Link>
-                    <Link
-                      href="/md5"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
-                    >
-                      <Hash className="w-5 h-5" />
-                      <span>MD5 Hash</span>
-                    </Link>
-                    <Link
-                      href="/sha1"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
-                    >
-                      <KeyRound className="w-5 h-5" />
-                      <span>SHA1 Hash</span>
-                    </Link>
+                  <div className="space-y-6">
+                    {/* Two Way Category */}
+                    <div>
+                      <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-600 uppercase tracking-wider">
+                        Two Way
+                      </h3>
+                      <div className="space-y-1">
+                        <Link
+                          href="/"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <Home className="w-5 h-5" />
+                          <span>Base64</span>
+                        </Link>
+                        <Link
+                          href="/hex"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <Code className="w-5 h-5" />
+                          <span>Hex</span>
+                        </Link>
+                        <Link
+                          href="/url"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <Link2 className="w-5 h-5" />
+                          <span>URL</span>
+                        </Link>
+                        <Link
+                          href="/base32"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <LockIcon className="w-5 h-5" />
+                          <span>Base32</span>
+                        </Link>
+                        <Link
+                          href="/rot13"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <ArrowLeftRight className="w-5 h-5" />
+                          <span>ROT13</span>
+                        </Link>
+                        <Link
+                          href="/rot13"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <ArrowLeftRight className="w-5 h-5" />
+                          <span>ROT13</span>
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* One Way Category */}
+                    <div>
+                      <h3 className="px-4 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-600 uppercase tracking-wider">
+                        One Way
+                      </h3>
+                      <div className="space-y-1">
+                        <Link
+                          href="/md5"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <Hash className="w-5 h-5" />
+                          <span>MD5 Hash</span>
+                        </Link>
+                        <Link
+                          href="/sha1"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                        >
+                          <KeyRound className="w-5 h-5" />
+                          <span>SHA1 Hash</span>
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </nav>
 
