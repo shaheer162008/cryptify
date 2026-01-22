@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Copy, ArrowLeftRight, Check } from 'lucide-react';
+import { Copy, ArrowLeftRight, Check, ExternalLink } from 'lucide-react';
 import { base32Encode, base32Decode } from '@/lib/encryption';
 
 export default function Base32Page() {
@@ -102,6 +102,34 @@ export default function Base32Page() {
           <span>Live processing enabled - RFC 4648 Base32</span>
           <span>{inputText.length} characters</span>
         </div>
+
+        {/* Info Section */}
+        <Card className="border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+              <p>
+                <strong>Base32</strong> is a binary-to-text encoding scheme defined in RFC 4648. It uses 32 printable ASCII characters (A-Z, 2-7) to encode binary data, making it case-insensitive and suitable for systems that are case-insensitive or restricted to alphanumeric characters.
+              </p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Use cases:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Two-factor authentication (TOTP, HOTP)</li>
+                <li>Case-insensitive encoding for URLs and emails</li>
+                <li>DNS DNSSEC encoding</li>
+                <li>Data transmission over limited character sets</li>
+              </ul>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Example:</p>
+              <p className="font-mono bg-white dark:bg-black p-2 rounded">"Hello" → "JBSWY3DPEBLW64TMMQ======"</p>
+            </div>
+            <a 
+              href="https://en.wikipedia.org/wiki/Base32" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium whitespace-nowrap"
+            >
+              Wikipedia <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </Card>
       </div>
     </div>
   );

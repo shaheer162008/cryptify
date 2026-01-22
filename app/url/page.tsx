@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Copy, ArrowLeftRight, Check } from 'lucide-react';
+import { Copy, ArrowLeftRight, Check, ExternalLink } from 'lucide-react';
 import { urlEncode, urlDecode } from '@/lib/encryption';
 
 export default function URLPage() {
@@ -102,6 +102,34 @@ export default function URLPage() {
           <span>Live processing enabled - URL percent encoding</span>
           <span>{inputText.length} characters</span>
         </div>
+
+        {/* Info Section */}
+        <Card className="border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+              <p>
+                <strong>URL Encoding</strong> (Percent Encoding) is a mechanism for encoding information in URLs. It converts special characters into a format that can be safely transmitted over the internet, replacing them with a percent sign (%) followed by two hexadecimal digits.
+              </p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Use cases:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Query parameters in URLs (RFC 3986)</li>
+                <li>Web form submissions and API parameters</li>
+                <li>Email addresses in URLs</li>
+                <li>Safe transmission of special characters</li>
+              </ul>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Example:</p>
+              <p className="font-mono bg-white dark:bg-black p-2 rounded">"Hello World!" → "Hello%20World%21"</p>
+            </div>
+            <a 
+              href="https://en.wikipedia.org/wiki/Percent-encoding" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium whitespace-nowrap"
+            >
+              Wikipedia <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </Card>
       </div>
     </div>
   );

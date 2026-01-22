@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Copy, ArrowLeftRight, Check } from 'lucide-react';
+import { Copy, ArrowLeftRight, Check, ExternalLink } from 'lucide-react';
 import { rot13 } from '@/lib/encryption';
 
 export default function ROT13Page() {
@@ -119,6 +119,34 @@ export default function ROT13Page() {
           <span>Live processing enabled - ROT13 is self-inverse</span>
           <span>{inputText.length} characters</span>
         </div>
+
+        {/* Info Section */}
+        <Card className="border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+              <p>
+                <strong>ROT13</strong> is a simple letter substitution cipher that replaces each letter with the letter 13 positions after it in the alphabet. It's a special case of the Caesar cipher with a shift of 13. Since ROT13 operates on 26 letters, applying it twice returns the original text (it's self-inverse).
+              </p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Use cases:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Simple obfuscation of text (not secure encryption)</li>
+                <li>Internet forums for spoiler text</li>
+                <li>Historical cipher education</li>
+                <li>Quick reversible text transformation</li>
+              </ul>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Example:</p>
+              <p className="font-mono bg-white dark:bg-black p-2 rounded">"Hello World" → "Uryyb Jbeyq"</p>
+            </div>
+            <a 
+              href="https://en.wikipedia.org/wiki/ROT13" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium whitespace-nowrap"
+            >
+              Wikipedia <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </Card>
       </div>
     </div>
   );

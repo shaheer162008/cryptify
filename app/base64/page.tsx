@@ -3,17 +3,13 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Copy, ArrowLeftRight, Check } from 'lucide-react';
-import { textToHex, hexToText } from '@/lib/encryption';
-import { ExternalLink } from 'lucide-react';
+import { Copy, ArrowLeftRight, Check, ExternalLink } from 'lucide-react';
+import { base64Encrypt, base64Decrypt } from '@/lib/encryption';
 
-type DelimiterType = 'Space' | 'Colon' | 'Comma' | 'Semi-colon' | 'Line feed' | 'CRLF' | '0x' | '\\x' | 'None';
-
-export default function HexPage() {
-  const [mode, setMode] = useState<'encode' | 'decode'>('encode');
+export default function Base64Page() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
-  const [delimiter, setDelimiter] = useState<DelimiterType>('Space');
+  const [mode, setMode] = useState<'encode' | 'decode'>('encode');
   const [copiedInput, setCopiedInput] = useState(false);
   const [copiedOutput, setCopiedOutput] = useState(false);
 
@@ -23,12 +19,12 @@ export default function HexPage() {
       return;
     }
     try {
-      const result = mode === 'encode' ? textToHex(inputText, delimiter) : hexToText(inputText, delimiter);
+      const result = mode === 'encode' ? base64Encrypt(inputText) : base64Decrypt(inputText);
       setOutputText(result);
     } catch (error) {
       setOutputText('');
     }
-  }, [inputText, mode, delimiter]);
+  }, [inputText, mode]);
 
   const copyToClipboard = async (text: string, type: 'input' | 'output') => {
     if (!text) return;
@@ -51,44 +47,27 @@ export default function HexPage() {
 
   return (
     <div className="h-screen bg-white dark:bg-black flex flex-col overflow-hidden">
-      <div className="flex-1 flex flex-col p-4 md:p-6 gap-4 max-w-7xl mx-auto w-full">
+      <div className="flex-1 flex flex-col p-4 md:p-6 gap-4 max-w-7xl mx-auto w-full overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white">Hex</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white">Base64</h1>
             <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-900 rounded-lg">
               <Button onClick={() => setMode('encode')} variant="ghost" size="sm" className={`${mode === 'encode' ? 'bg-black text-white dark:bg-white dark:text-black' : 'text-gray-600 dark:text-gray-400'} px-4 py-1 text-xs font-semibold transition-all`}>Encode</Button>
               <Button onClick={() => setMode('decode')} variant="ghost" size="sm" className={`${mode === 'decode' ? 'bg-black text-white dark:bg-white dark:text-black' : 'text-gray-600 dark:text-gray-400'} px-4 py-1 text-xs font-semibold transition-all`}>Decode</Button>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <select
-              value={delimiter}
-              onChange={(e) => setDelimiter(e.target.value as DelimiterType)}
-              className="px-3 py-1.5 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-sm text-black dark:text-white"
-            >
-              <option value="Space">Space</option>
-              <option value="Colon">Colon</option>
-              <option value="Comma">Comma</option>
-              <option value="Semi-colon">Semi-colon</option>
-              <option value="Line feed">Line feed</option>
-              <option value="CRLF">CRLF</option>
-              <option value="0x">0x</option>
-              <option value="\\x">\\x</option>
-              <option value="None">None</option>
-            </select>
-            <Button onClick={switchMode} variant="outline" size="sm" className="border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900">
-              <ArrowLeftRight className="w-4 h-4" />
-            </Button>
-          </div>
+          <Button onClick={switchMode} variant="outline" size="sm" className="border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900">
+            <ArrowLeftRight className="w-4 h-4" />
+          </Button>
         </div>
 
-        {/* Main Content - Side by Side */}
+        {/* Main Content */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 min-h-0">
           {/* Input Panel */}
           <Card className="flex flex-col border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
-              <span className="text-sm font-semibold text-black dark:text-white">{mode === 'encode' ? 'Text Input' : 'Hex Input'}</span>
+              <span className="text-sm font-semibold text-black dark:text-white">{mode === 'encode' ? 'Text Input' : 'Base64 Input'}</span>
               <Button onClick={() => copyToClipboard(inputText, 'input')} variant="ghost" size="sm" disabled={!inputText} className="h-7 px-2 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white disabled:opacity-30">
                 {copiedInput ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </Button>
@@ -96,7 +75,7 @@ export default function HexPage() {
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder={mode === 'encode' ? 'Enter text to convert to hex...' : 'Enter hex to convert to text...'}
+              placeholder={mode === 'encode' ? 'Enter text to encode...' : 'Enter Base64 to decode...'}
               className="flex-1 p-4 bg-white dark:bg-black text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none resize-none font-mono text-sm"
             />
           </Card>
@@ -104,7 +83,7 @@ export default function HexPage() {
           {/* Output Panel */}
           <Card className="flex flex-col border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
             <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
-              <span className="text-sm font-semibold text-black dark:text-white">{mode === 'encode' ? 'Hex Output' : 'Text Output'}</span>
+              <span className="text-sm font-semibold text-black dark:text-white">{mode === 'encode' ? 'Base64 Output' : 'Text Output'}</span>
               <Button onClick={() => copyToClipboard(outputText, 'output')} variant="ghost" size="sm" disabled={!outputText} className="h-7 px-2 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white disabled:opacity-30">
                 {copiedOutput ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </Button>
@@ -121,7 +100,7 @@ export default function HexPage() {
         {/* Info Bar */}
         <div className="flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-900 rounded-lg text-xs text-gray-600 dark:text-gray-400">
           <span>Live processing enabled</span>
-          <span>{mode === 'encode' ? `${inputText.length} characters` : `${inputText.replace(/\s/g, '').length} hex characters`}</span>
+          <span>{inputText.length} characters</span>
         </div>
 
         {/* Info Section */}
@@ -129,25 +108,23 @@ export default function HexPage() {
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 space-y-2">
               <p>
-                <strong>Hexadecimal (Hex)</strong> is a base-16 number system using digits 0-9 and letters A-F. Each hex digit represents 4 bits of binary data, making it efficient for representing binary information in a human-readable format.
+                <strong>Base64</strong> is a binary-to-text encoding scheme that converts binary data into a radix-64 representation using 64 printable ASCII characters (A-Z, a-z, 0-9, +, /).
               </p>
-              <p className="font-semibold text-gray-800 dark:text-gray-200">Use cases:</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Memory addresses and binary data representation</li>
-                <li>Color codes in web design (RGB hex codes)</li>
-                <li>Machine code and low-level programming</li>
-                <li>Digital forensics and data analysis</li>
-              </ul>
-              <p className="font-semibold text-gray-800 dark:text-gray-200">Example:</p>
-              <p className="font-mono bg-white dark:bg-black p-2 rounded">"Hello" → "48 65 6c 6c 6f"</p>
+              <p>
+                <strong>Use Cases:</strong> Email transmission, data URLs, API authentication (Basic Auth), storing binary data as text.
+              </p>
+              <p>
+                <strong>Example:</strong> "Hello" → "SGVsbG8="
+              </p>
             </div>
-            <a 
-              href="https://en.wikipedia.org/wiki/Hexadecimal" 
-              target="_blank" 
+            <a
+              href="https://en.wikipedia.org/wiki/Base64"
+              target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium whitespace-nowrap"
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium whitespace-nowrap transition-colors"
             >
-              Wikipedia <ExternalLink className="w-3 h-3" />
+              Wikipedia
+              <ExternalLink className="w-3 h-3" />
             </a>
           </div>
         </Card>

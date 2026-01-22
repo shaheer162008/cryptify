@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Copy, ArrowLeftRight, Check } from 'lucide-react';
+import { Copy, ArrowLeftRight, Check, ExternalLink } from 'lucide-react';
 import { cryptifyCipher, cryptifyDecipher } from '@/lib/encryption';
 
 export default function CryptifyPage() {
@@ -116,6 +116,32 @@ export default function CryptifyPage() {
           <span>Live processing enabled - Custom Cryptify Cipher</span>
           <span>{inputText.length} characters</span>
         </div>
+
+        {/* Info Section */}
+        <Card className="border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+              <p>
+                <strong>Cryptify</strong> is a custom position-based XOR cipher created for the Cryptify app. It uses the seed key "CRYPTIFY" and applies XOR operations at each character position, making it reversible for both encryption and decryption with the same key pattern.
+              </p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Use cases:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Custom encryption within the Cryptify platform</li>
+                <li>Educational demonstration of XOR ciphers</li>
+                <li>Quick reversible text obfuscation</li>
+                <li>Position-aware cryptographic transformation</li>
+              </ul>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Example:</p>
+              <p className="font-mono bg-white dark:bg-black p-2 rounded">"Hello" → [encrypted bytes]</p>
+            </div>
+            <a 
+              href="/about/cryptify" 
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium whitespace-nowrap"
+            >
+              Learn More <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </Card>
       </div>
     </div>
   );

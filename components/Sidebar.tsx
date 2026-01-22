@@ -5,9 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Lock, Home, Hash, KeyRound, ArrowLeftRight, Code, Link2, Lock as LockIcon } from 'lucide-react';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Hide sidebar on homepage and about pages
+  if (pathname === '/' || pathname.startsWith('/about')) {
+    return null;
+  }
 
   return (
     <>
@@ -33,7 +40,7 @@ const Sidebar = () => {
               </h3>
               <div className="space-y-1">
                 <Link
-                  href="/"
+                  href="/base64"
                   className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                 >
                   <Home className="w-5 h-5" />
@@ -152,7 +159,7 @@ const Sidebar = () => {
                       </h3>
                       <div className="space-y-1">
                         <Link
-                          href="/"
+                          href="/base64"
                           onClick={() => setIsOpen(false)}
                           className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
                         >

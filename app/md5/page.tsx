@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { md5Hash } from '@/lib/encryption';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, ExternalLink } from 'lucide-react';
 
 export default function MD5Page() {
   const [inputText, setInputText] = useState('');
@@ -115,6 +115,34 @@ export default function MD5Page() {
           <span>Live hashing enabled - MD5 is a one-way cryptographic hash function</span>
           <span>{inputText.length} characters</span>
         </div>
+
+        {/* Info Section */}
+        <Card className="border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+              <p>
+                <strong>MD5</strong> (Message Digest Algorithm 5) is a cryptographic hash function that produces a 128-bit hash value. It's a one-way function, meaning you cannot reverse it to get the original input. Despite being widely used, MD5 is considered cryptographically broken and should not be used for further cryptographic purposes.
+              </p>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Use cases:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>File integrity verification (checksums)</li>
+                <li>Data structure storage in hash tables</li>
+                <li>Legacy systems (not recommended for security)</li>
+                <li>Creating unique identifiers</li>
+              </ul>
+              <p className="font-semibold text-gray-800 dark:text-gray-200">Example:</p>
+              <p className="font-mono bg-white dark:bg-black p-2 rounded">"Hello" → "8b1a9953c4611296aaf7a3c4ab8f3879"</p>
+            </div>
+            <a 
+              href="https://en.wikipedia.org/wiki/MD5" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium whitespace-nowrap"
+            >
+              Wikipedia <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        </Card>
       </div>
     </div>
   );
