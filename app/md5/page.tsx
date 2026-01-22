@@ -46,14 +46,9 @@ export default function MD5Page() {
       <div className="flex-1 flex flex-col p-4 md:p-6 gap-4 max-w-7xl mx-auto w-full">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white">
-              MD5 Hash
-            </h1>
-            <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 text-xs font-semibold rounded-full">
-              One-way
-            </span>
-          </div>
+          <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white">
+            MD5 Hash
+          </h1>
         </div>
 
         {/* Main Content - Side by Side */}
