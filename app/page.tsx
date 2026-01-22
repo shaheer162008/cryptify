@@ -15,6 +15,8 @@ const algorithms = [
   { name: 'Base32', path: '/base32', category: 'Two Way', description: 'RFC 4648 Base32 encoding and decoding' },
   { name: 'ROT13', path: '/rot13', category: 'Two Way', description: 'Simple cipher rotating letters by 13 positions' },
   { name: 'Cryptify', path: '/cryptify', category: 'Two Way', description: 'Custom position-based XOR cipher' },
+  // Advanced
+  { name: 'Chain Encrypt', path: '/chain-encrypt', category: 'Advanced', description: 'Multi-layer encryption with configurable encoder chains' },
   // One Way
   { name: 'MD5', path: '/md5', category: 'One Way', description: 'MD5 cryptographic hash function (128-bit)' },
   { name: 'SHA1', path: '/sha1', category: 'One Way', description: 'SHA-1 cryptographic hash function (160-bit)' },
@@ -22,6 +24,7 @@ const algorithms = [
 
 export default function HomePage() {
   const twoWay = algorithms.filter(a => a.category === 'Two Way');
+  const advanced = algorithms.filter(a => a.category === 'Advanced');
   const oneWay = algorithms.filter(a => a.category === 'One Way');
 
   return (
@@ -57,7 +60,29 @@ export default function HomePage() {
                     <h3 className="text-lg font-semibold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {algo.name}
                     </h3>
-                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0 ml-2" />
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {algo.description}
+                  </p>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Advanced */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-black dark:text-white mb-6">Advanced Encryption</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {advanced.map((algo) => (
+              <Link key={algo.path} href={algo.path}>
+                <Card className="border border-gray-200 dark:border-gray-800 p-6 hover:border-black dark:hover:border-white transition-all cursor-pointer h-full group">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-lg font-semibold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {algo.name}
+                    </h3>
+                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0 ml-2" />
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {algo.description}
@@ -79,7 +104,7 @@ export default function HomePage() {
                     <h3 className="text-lg font-semibold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {algo.name}
                     </h3>
-                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0 ml-2" />
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {algo.description}

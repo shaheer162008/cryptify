@@ -70,9 +70,17 @@ const algorithms = [
     example: '"Hello" → "f7ff9e8b7b1cce4932b34241f1f97a4aaa7d6c4c"',
     wikipedia: 'https://en.wikipedia.org/wiki/SHA-1',
   },
+  {
+    name: 'Chain Encrypt',
+    category: 'Advanced Encryption',
+    description: 'Chain Encrypt combines multiple encoding algorithms in a sequence determined by your encryption key. Each unique character in the key determines which encoders (Base64, Hex, URL, Base32, ROT13) are used and in what order. This creates a multi-layer encryption that is both simple and effective, applying encoders sequentially for encryption and reversing the process for decryption.',
+    useCases: ['Multi-layer text encryption', 'Key-based encoding chains', 'Enhanced obfuscation', 'Educational cryptography'],
+    example: 'Key "SECURE" → encrypts through 5 unique encoder stages',
+    documentation: '/chain-encrypt',
+  },
 ];
 
-const categories = ['Two-Way Encoding', 'Two-Way Cipher', 'One-Way Hashing'];
+const categories = ['Two-Way Encoding', 'Two-Way Cipher', 'Advanced Encryption', 'One-Way Hashing'];
 
 export default function AboutPage() {
   return (
