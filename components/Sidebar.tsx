@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Lock, Home, Hash } from 'lucide-react';
+import { Menu, Lock, Home, Hash, KeyRound } from 'lucide-react';
 import { useState } from 'react';
 
 const Sidebar = () => {
@@ -39,6 +39,13 @@ const Sidebar = () => {
             >
               <Hash className="w-5 h-5" />
               <span>MD5 Hash</span>
+            </Link>
+            <Link
+              href="/sha1"
+              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+            >
+              <KeyRound className="w-5 h-5" />
+              <span>SHA1 Hash</span>
             </Link>
           </div>
         </nav>
@@ -101,6 +108,14 @@ const Sidebar = () => {
                     >
                       <Hash className="w-5 h-5" />
                       <span>MD5 Hash</span>
+                    </Link>
+                    <Link
+                      href="/sha1"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-all font-medium"
+                    >
+                      <KeyRound className="w-5 h-5" />
+                      <span>SHA1 Hash</span>
                     </Link>
                   </div>
                 </nav>

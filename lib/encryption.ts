@@ -1,5 +1,6 @@
 import base64 from 'base-64';
 import MD5 from 'md5.js';
+import sha1 from 'sha1';
 
 // Algorithm: Base64 Encoding
 export const base64Encrypt = (text: string): string => {
@@ -27,6 +28,16 @@ export const md5Hash = (text: string): string => {
     return hash;
   } catch (error) {
     throw new Error('MD5 hashing failed');
+  }
+};
+
+// Algorithm: SHA1 Hash
+export const sha1Hash = (text: string): string => {
+  try {
+    const hash = sha1(text);
+    return hash;
+  } catch (error) {
+    throw new Error('SHA1 hashing failed');
   }
 };
 
