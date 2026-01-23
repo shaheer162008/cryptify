@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Copy, Check, Plus, Trash2, ChevronDown } from 'lucide-react';
+import { Spinner } from '@/components/ui/spinner';
+import { Copy, Check, Plus, Trash2, ChevronDown, Lock } from 'lucide-react';
 import { base64Encrypt, base64Decrypt, textToHex, hexToText, urlEncode, urlDecode, base32Encode, base32Decode, rot13 } from '@/lib/encryption';
 
 const ENCODER_DEFINITIONS = {
@@ -29,6 +30,8 @@ export default function ChainEncryptPage() {
   const [chain, setChain] = useState<ChainItem[]>([{ id: '0', encoderId: 0, count: 1 }]);
   const [showConfig, setShowConfig] = useState(true);
   const [copiedKey, setCopiedKey] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [decryptKey, setDecryptKey] = useState('');
 
   // Memoize generated key
   const generatedKey = useMemo(() => {
@@ -36,40 +39,74 @@ export default function ChainEncryptPage() {
     return keyParts || 'empty';
   }, [chain]);
 
-  // Process encryption/decryption
-  useEffect(() => {
-    if (!inputText.trim() || chain.length === 0) {
-      setOutputText('');
+  // Parse key to reconstruct chain
+  const parseKeyToChain = (key: string): ChainItem[] => {
+    try {
+      const parts = key.split('-');
+      return parts.map((part, index) => {
+        const [encoderId, count] = part.split('x').map(Number);
+        return {
+          id: index.toString(),
+          encoderId: encoderId || 0,
+          count: count || 1,
+        };
+      });
+    } catch {
+      return [];
+    }
+  };
+
+  // Manual processing function
+  const handleProcess = async () => {
+    if (!inputText.trim()) {
       return;
     }
 
-    try {
-      let result = inputText;
-
-      if (mode === 'encrypt') {
-        // Apply each algorithm with specified count
-        for (const item of chain) {
-          const encoder = ENCODER_DEFINITIONS[item.encoderId as keyof typeof ENCODER_DEFINITIONS];
-          for (let i = 0; i < item.count; i++) {
-            result = encoder.fn.encrypt(result);
-          }
-        }
-      } else {
-        // Reverse order for decryption
-        for (let i = chain.length - 1; i >= 0; i--) {
-          const item = chain[i];
-          const encoder = ENCODER_DEFINITIONS[item.encoderId as keyof typeof ENCODER_DEFINITIONS];
-          for (let j = 0; j < item.count; j++) {
-            result = encoder.fn.decrypt(result);
-          }
-        }
-      }
-
-      setOutputText(result);
-    } catch {
-      setOutputText('');
+    // For decrypt mode, validate key
+    if (mode === 'decrypt' && !decryptKey.trim()) {
+      return;
     }
-  }, [inputText, mode, chain]);
+
+    setIsProcessing(true);
+    setOutputText('');
+
+    // Use setTimeout to allow UI to update with spinner
+    setTimeout(() => {
+      try {
+        let result = inputText;
+        let processingChain = chain;
+
+        if (mode === 'encrypt') {
+          // Apply each algorithm with specified count
+          for (const item of processingChain) {
+            const encoder = ENCODER_DEFINITIONS[item.encoderId as keyof typeof ENCODER_DEFINITIONS];
+            for (let i = 0; i < item.count; i++) {
+              result = encoder.fn.encrypt(result);
+            }
+          }
+        } else {
+          // Parse key and reverse for decryption
+          processingChain = parseKeyToChain(decryptKey);
+          if (processingChain.length === 0) {
+            throw new Error('Invalid key');
+          }
+          for (let i = processingChain.length - 1; i >= 0; i--) {
+            const item = processingChain[i];
+            const encoder = ENCODER_DEFINITIONS[item.encoderId as keyof typeof ENCODER_DEFINITIONS];
+            for (let j = 0; j < item.count; j++) {
+              result = encoder.fn.decrypt(result);
+            }
+          }
+        }
+
+        setOutputText(result);
+      } catch {
+        setOutputText('Error processing text');
+      } finally {
+        setIsProcessing(false);
+      }
+    }, 100);
+  };
 
   const addToChain = () => {
     const newId = Math.random().toString();
@@ -114,7 +151,7 @@ export default function ChainEncryptPage() {
     <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white">Chain Encrypt</h1>
           <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-900 rounded-lg">
             <Button
@@ -144,18 +181,19 @@ export default function ChainEncryptPage() {
           </div>
         </div>
 
-        {/* Configuration Section - Collapsible */}
-        <Card className="border border-gray-200 dark:border-gray-800">
-          <button
-            onClick={() => setShowConfig(!showConfig)}
-            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors"
-          >
-            <h2 className="text-lg font-semibold text-black dark:text-white">Configuration</h2>
-            <ChevronDown className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform ${showConfig ? 'rotate-180' : ''}`} />
-          </button>
+        {/* Configuration Section - Conditional Based on Mode */}
+        {mode === 'encrypt' ? (
+          <Card className="border border-gray-200 dark:border-gray-800">
+            <button
+              onClick={() => setShowConfig(!showConfig)}
+              className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors"
+            >
+              <h2 className="text-lg font-semibold text-black dark:text-white">Configuration</h2>
+              <ChevronDown className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform ${showConfig ? 'rotate-180' : ''}`} />
+            </button>
 
-          {showConfig && (
-            <div className="border-t border-gray-200 dark:border-gray-800 p-4 space-y-4">
+            {showConfig && (
+              <div className="border-t border-gray-200 dark:border-gray-800 p-4 space-y-4">
               {/* Chain Configuration */}
               <div className="space-y-3">
                 <h3 className="font-semibold text-black dark:text-white text-sm">Encoder Chain</h3>
@@ -258,6 +296,32 @@ export default function ChainEncryptPage() {
             </div>
           )}
         </Card>
+        ) : (
+          <Card className="border border-gray-200 dark:border-gray-800 p-4">
+            <div className="space-y-3">
+              <h2 className="text-lg font-semibold text-black dark:text-white">Decryption Key</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Enter the encryption key to decrypt your text. The key determines the algorithm chain and order.
+              </p>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="decrypt-key" className="text-sm font-medium text-black dark:text-white">
+                  Key:
+                </label>
+                <input
+                  id="decrypt-key"
+                  type="text"
+                  value={decryptKey}
+                  onChange={(e) => setDecryptKey(e.target.value)}
+                  placeholder="e.g., 0x1-2x3-1x1"
+                  className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-black text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 font-mono text-sm"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Format: encoderId×count-encoderId×count (e.g., 0×1-2×3 means Base64×1 then URL×3)
+                </p>
+              </div>
+            </div>
+          </Card>
+        )}
 
         {/* Main Content - Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -295,19 +359,50 @@ export default function ChainEncryptPage() {
                 onClick={() => copyToClipboard(outputText, 'output')}
                 variant="ghost"
                 size="sm"
-                disabled={!outputText}
+                disabled={!outputText || isProcessing}
                 className="h-7 px-2 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white disabled:opacity-30"
               >
                 {copiedOutput ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </Button>
             </div>
-            <textarea
-              value={outputText}
-              readOnly
-              placeholder="Result will appear here automatically..."
-              className="flex-1 p-4 bg-gray-50 dark:bg-gray-950 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none resize-none font-mono text-sm"
-            />
+            {isProcessing ? (
+              <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+                <div className="flex flex-col items-center gap-3">
+                  <Spinner size="lg" />
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Processing your text...</p>
+                </div>
+              </div>
+            ) : (
+              <textarea
+                value={outputText}
+                readOnly
+                placeholder="Click the button above to process..."
+                className="flex-1 p-4 bg-gray-50 dark:bg-gray-950 text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none resize-none font-mono text-sm"
+              />
+            )}
           </Card>
+        </div>
+
+        {/* Process Button - Centered */}
+        <div className="flex justify-center">
+          <Button
+            onClick={handleProcess}
+            disabled={!inputText.trim() || isProcessing || (mode === 'decrypt' && !decryptKey.trim())}
+            className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed px-8 py-2.5"
+            size="lg"
+          >
+            {isProcessing ? (
+              <>
+                <Spinner size="sm" className="mr-2" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <Lock className="w-4 h-4 mr-2" />
+                {mode === 'encrypt' ? 'Encrypt Now' : 'Decrypt Now'}
+              </>
+            )}
+          </Button>
         </div>
 
         {/* Info Bar */}
@@ -323,13 +418,22 @@ export default function ChainEncryptPage() {
               <strong>Chain Encrypt</strong> lets you create custom multi-layer encryption by selecting algorithms, their order, and repetition count. Each configuration generates a unique key that you can share or use with Cryptify cipher.
             </p>
             <p className="font-semibold text-gray-800 dark:text-gray-200">How to use:</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Click "Configuration" to expand settings</li>
-              <li>Add/remove algorithms and set how many times each runs</li>
-              <li>Key auto-generates from your configuration</li>
-              <li>Copy key to share your encryption setup</li>
-              <li>Type in input to see instant encrypted/decrypted result</li>
-            </ul>
+            {mode === 'encrypt' ? (
+              <ul className="list-disc list-inside space-y-1">
+                <li>Click &ldquo;Configuration&rdquo; to expand settings</li>
+                <li>Add/remove algorithms and set how many times each runs</li>
+                <li>Key auto-generates from your configuration</li>
+                <li>Copy the generated key to share your encryption setup</li>
+                <li>Type in input and click &ldquo;Encrypt Now&rdquo; to process</li>
+              </ul>
+            ) : (
+              <ul className="list-disc list-inside space-y-1">
+                <li>Paste your encrypted text in the input field</li>
+                <li>Enter the encryption key you received</li>
+                <li>Click &ldquo;Decrypt Now&rdquo; to reveal the original text</li>
+                <li>Key format: encoderId×count-encoderId×count (e.g., 0×1-2×3)</li>
+              </ul>
+            )}
           </div>
         </Card>
       </div>
